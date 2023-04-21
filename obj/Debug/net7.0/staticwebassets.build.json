@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "paQG5Zq+CTj3qzkbHxpk9DDZsfJ/5b/0SAeqkPO5Oqc=",
+  "Source": "server-dotnet-fitnessapp",
+  "BasePath": "_content/server-dotnet-fitnessapp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

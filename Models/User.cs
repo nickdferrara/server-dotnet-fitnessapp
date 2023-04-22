@@ -1,11 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace server_dotnet_fitnessapp.Models;
 
 public class User
 {
     [Key]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid UserId { get; set; }
     public string Email { get; set; } = null!;
     public string Password { get; set; } = null!;
 }

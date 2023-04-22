@@ -10,5 +10,6 @@ public class Person
     public Guid PersonId { get; set; }
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
+    public Address? Address { get; set; } = null!;
     public string? ProfilePicture { get; set; } = null!;
 }

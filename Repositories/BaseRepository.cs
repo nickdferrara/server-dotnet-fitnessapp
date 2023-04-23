@@ -50,11 +50,14 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
 
     public TEntity Update(TEntity entity)
     {
-        return _context.Set<TEntity>().Update(entity).Entity;
+        TEntity updatedEntity = _context.Set<TEntity>().Update(entity).Entity;
+        _context.SaveChanges();
+        return updatedEntity;
     }
 
     public void UpdateAll(IEnumerable<TEntity> entities)
     {
         _context.Set<TEntity>().UpdateRange(entities);
+        _context.SaveChanges();
     }
 }

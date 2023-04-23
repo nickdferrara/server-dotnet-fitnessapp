@@ -9,7 +9,7 @@ public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class
 
     public BaseService(IBaseRepository<TEntity> repository)
     {
-        this._repository = repository;
+        _repository = repository;
     }
 
     public IEnumerable<TEntity> Get()

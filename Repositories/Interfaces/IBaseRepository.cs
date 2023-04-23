@@ -8,8 +8,6 @@ public interface IBaseRepository<TEntity> where TEntity : class
     
     TEntity? GetById(object id);
 
-    IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter);
-
     TEntity Insert(TEntity entity);
 
     void InsertAll(IEnumerable<TEntity> entities);

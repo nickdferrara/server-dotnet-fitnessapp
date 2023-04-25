@@ -13,6 +13,6 @@ public class Workout
     public int Capacity { get; set; } = 0;
     public DateTime StartDateTime { get; set; }
     public Coach Coach { get; set; } = null!;
-    public virtual IList<Roster> RosterList { get; set; } = null!;
-    public virtual IList<Waitlist> WaitList { get; set; } = null!;
+    public Roster RosterList { get; set; } = null!;
+    public Waitlist WaitList { get; set; } = null!;
 }

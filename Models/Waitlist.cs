@@ -7,10 +7,9 @@ public class Waitlist
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid WaitlistId { get; set; }
-    public ICollection<User> Users { get; set; } = null!; 
+    public Guid WaitlistId { get; set; }    
+    public IList<User> Users { get; set; } = null!;    
     [ForeignKey(nameof(Workout))]
     public Guid WorkoutId { get; set; }
-
     public virtual Workout Workout { get; set; } = null;
 }

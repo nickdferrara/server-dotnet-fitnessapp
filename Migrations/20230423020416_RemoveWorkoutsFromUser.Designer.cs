@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using server_dotnet_fitnessapp.Context;
 
@@ -11,9 +12,11 @@ using server_dotnet_fitnessapp.Context;
 namespace server_dotnet_fitnessapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230423020416_RemoveWorkoutsFromUser")]
+    partial class RemoveWorkoutsFromUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,8 +229,7 @@ namespace server_dotnet_fitnessapp.Migrations
 
                     b.HasKey("RosterId");
 
-                    b.HasIndex("WorkoutId")
-                        .IsUnique();
+                    b.HasIndex("WorkoutId");
 
                     b.ToTable("Roster");
                 });
@@ -277,8 +279,7 @@ namespace server_dotnet_fitnessapp.Migrations
 
                     b.HasKey("WaitlistId");
 
-                    b.HasIndex("WorkoutId")
-                        .IsUnique();
+                    b.HasIndex("WorkoutId");
 
                     b.ToTable("Waitlist");
                 });
@@ -395,8 +396,8 @@ namespace server_dotnet_fitnessapp.Migrations
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.Roster", b =>
                 {
                     b.HasOne("server_dotnet_fitnessapp.Models.Workout", "Workout")
-                        .WithOne("RosterList")
-                        .HasForeignKey("server_dotnet_fitnessapp.Models.Roster", "WorkoutId")
+                        .WithMany("RosterList")
+                        .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -427,8 +428,8 @@ namespace server_dotnet_fitnessapp.Migrations
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.Waitlist", b =>
                 {
                     b.HasOne("server_dotnet_fitnessapp.Models.Workout", "Workout")
-                        .WithOne("WaitList")
-                        .HasForeignKey("server_dotnet_fitnessapp.Models.Waitlist", "WorkoutId")
+                        .WithMany("WaitList")
+                        .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -471,11 +472,9 @@ namespace server_dotnet_fitnessapp.Migrations
 
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.Workout", b =>
                 {
-                    b.Navigation("RosterList")
-                        .IsRequired();
+                    b.Navigation("RosterList");
 
-                    b.Navigation("WaitList")
-                        .IsRequired();
+                    b.Navigation("WaitList");
                 });
 #pragma warning restore 612, 618
         }

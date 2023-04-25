@@ -29,7 +29,9 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
 
     public TEntity Insert(TEntity entity)
     {
-        return _context.Set<TEntity>().Add(entity).Entity;
+        var createdEntity = _context.Set<TEntity>().Add(entity).Entity;
+        _context.SaveChanges();
+        return createdEntity;
     }
 
     public void InsertAll(IEnumerable<TEntity> entities)

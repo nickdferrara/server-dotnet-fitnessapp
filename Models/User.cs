@@ -11,4 +11,5 @@ public class User
     public string Email { get; set; } = null!;
     public string Password { get; set; } = null!;
     public Person Person { get; set; } = null!;
+    public IList<UserWorkout>? UserWorkouts { get; set; }
 }

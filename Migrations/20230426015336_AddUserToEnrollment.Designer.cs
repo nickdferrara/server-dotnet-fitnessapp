@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using server_dotnet_fitnessapp.Context;
 
@@ -11,9 +12,11 @@ using server_dotnet_fitnessapp.Context;
 namespace server_dotnet_fitnessapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230426015336_AddUserToEnrollment")]
+    partial class AddUserToEnrollment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,6 +97,17 @@ namespace server_dotnet_fitnessapp.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Coaches");
+                });
+
+            modelBuilder.Entity("server_dotnet_fitnessapp.Models.Enrollment", b =>
+                {
+                    b.Property<Guid>("EnrollmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("EnrollmentId");
+
+                    b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.Location", b =>
@@ -225,6 +239,9 @@ namespace server_dotnet_fitnessapp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("EnrollmentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -234,24 +251,11 @@ namespace server_dotnet_fitnessapp.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("EnrollmentId");
+
                     b.HasIndex("PersonId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.UserWorkout", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("WorkoutId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("UserId", "WorkoutId");
-
-                    b.HasIndex("WorkoutId");
-
-                    b.ToTable("UserWorkouts");
                 });
 
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.Workout", b =>
@@ -270,6 +274,9 @@ namespace server_dotnet_fitnessapp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("EnrollmentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("LocationId")
                         .HasColumnType("uniqueidentifier");
 
@@ -279,6 +286,8 @@ namespace server_dotnet_fitnessapp.Migrations
                     b.HasKey("WorkoutId");
 
                     b.HasIndex("CoachId");
+
+                    b.HasIndex("EnrollmentId");
 
                     b.HasIndex("LocationId");
 
@@ -365,6 +374,11 @@ namespace server_dotnet_fitnessapp.Migrations
 
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.User", b =>
                 {
+                    b.HasOne("server_dotnet_fitnessapp.Models.Enrollment", null)
+                        .WithMany("EnrolledUsers")
+                        .HasForeignKey("EnrollmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("server_dotnet_fitnessapp.Models.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonId")
@@ -374,30 +388,17 @@ namespace server_dotnet_fitnessapp.Migrations
                     b.Navigation("Person");
                 });
 
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.UserWorkout", b =>
-                {
-                    b.HasOne("server_dotnet_fitnessapp.Models.User", "User")
-                        .WithMany("UserWorkouts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("server_dotnet_fitnessapp.Models.Workout", "Workout")
-                        .WithMany("UserWorkouts")
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("Workout");
-                });
-
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.Workout", b =>
                 {
                     b.HasOne("server_dotnet_fitnessapp.Models.Coach", "Coach")
                         .WithMany()
                         .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("server_dotnet_fitnessapp.Models.Enrollment", "Enrollment")
+                        .WithMany()
+                        .HasForeignKey("EnrollmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -409,6 +410,8 @@ namespace server_dotnet_fitnessapp.Migrations
 
                     b.Navigation("Coach");
 
+                    b.Navigation("Enrollment");
+
                     b.Navigation("Location");
                 });
 
@@ -417,14 +420,9 @@ namespace server_dotnet_fitnessapp.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.User", b =>
+            modelBuilder.Entity("server_dotnet_fitnessapp.Models.Enrollment", b =>
                 {
-                    b.Navigation("UserWorkouts");
-                });
-
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.Workout", b =>
-                {
-                    b.Navigation("UserWorkouts");
+                    b.Navigation("EnrolledUsers");
                 });
 #pragma warning restore 612, 618
         }

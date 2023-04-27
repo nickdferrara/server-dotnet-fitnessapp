@@ -26,4 +26,16 @@ public class UserController : Controller
 
         return Ok(_userService.Insert(user));
     }
+    
+    [HttpPost("/api/v1/users/loginuser")]
+    [ProducesResponseType(201, Type = typeof(User))]
+    public IActionResult LoginUser([FromBody] User user)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        return Ok(_userService.Login(user));
+    }
 }

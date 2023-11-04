@@ -28,7 +28,7 @@ public class UserController : Controller
     }
     
     [HttpPost("/api/v1/users/loginuser")]
-    [ProducesResponseType(201, Type = typeof(User))]
+    [ProducesResponseType(200, Type = typeof(User))]
     public IActionResult LoginUser([FromBody] User user)
     {
         if (!ModelState.IsValid)

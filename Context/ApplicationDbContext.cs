@@ -9,7 +9,7 @@ public class ApplicationDbContext : DbContext
         DbContextOptions<ApplicationDbContext> options
     ) : base(options)        
     {
-    }    
+    }
     
     public DbSet<User> Users { get; set; }
     public DbSet<Address> Addresses { get; set; }
@@ -22,6 +22,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Workout> Workouts { get; set; }
     public DbSet<UserWorkout> UserWorkouts { get; set; }
+    public DbSet<Waitlist> Waitlist { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelbuilder)
     {
@@ -32,15 +33,17 @@ public class ApplicationDbContext : DbContext
 
         modelbuilder.Entity<UserWorkout>()
             .HasKey(x => new { x.UserId, x.WorkoutId });
+        
         modelbuilder.Entity<UserWorkout>()
             .HasOne(x => x.User)
             .WithMany(x => x.UserWorkouts)
             .HasForeignKey(x => x.UserId);
+        
         modelbuilder.Entity<UserWorkout>()
             .HasOne(x => x.Workout)
             .WithMany(x => x.UserWorkouts)
-            .HasForeignKey(x => x.WorkoutId);        
-        
+            .HasForeignKey(x => x.WorkoutId);
+
         base.OnModelCreating(modelbuilder);
     }
 }

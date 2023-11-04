@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace server_dotnet_fitnessapp.Models;
 
-public class Cart
+public class Waitlist
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid CartId { get; set; }
-    public User User { get; set; } = null!;
-    public ICollection<Product> Products { get; set; } = null!;
+    public Guid WaitlistId { get; set; }
+    public Workout Workout { get; set; } = null;
+    public DateTime SignedUpTime { get; set; }
 }

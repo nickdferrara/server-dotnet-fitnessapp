@@ -22,7 +22,7 @@ public class UserService : BaseService<User>, IUserService
     {
         var existingUser = FindByEmail(user.Email);
         if (existingUser is not null) 
-            throw new EmailAlreadyExistsException("Email already exists. Try loging in.");
+            throw new EmailAlreadyExistsException("Email already exists. Try logging in.");
         return Insert(user);
     }
 

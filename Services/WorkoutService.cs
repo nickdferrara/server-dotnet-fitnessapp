@@ -14,4 +14,5 @@ public class WorkoutService : BaseService<Workout>, IWorkoutService
     {
         _workoutRepository = _workoutRepository;
     }
+    
 }

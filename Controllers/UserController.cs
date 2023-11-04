@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using server_dotnet_fitnessapp.Models;
 using server_dotnet_fitnessapp.Services.Interfaces;
@@ -14,7 +15,8 @@ public class UserController : Controller
     {
         _userService = userService;
     }
-
+    
+    [AllowAnonymous]
     [HttpPost("/api/v1/users/registeruser")]
     [ProducesResponseType(201, Type = typeof(User))]
     public IActionResult RegisterUser([FromBody] User user)
@@ -27,6 +29,7 @@ public class UserController : Controller
         return Ok(_userService.Insert(user));
     }
     
+    [AllowAnonymous]
     [HttpPost("/api/v1/users/loginuser")]
     [ProducesResponseType(200, Type = typeof(User))]
     public IActionResult LoginUser([FromBody] User user)

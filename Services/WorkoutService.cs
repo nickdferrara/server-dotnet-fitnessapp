@@ -8,20 +8,41 @@ public class WorkoutService : BaseService<Workout>, IWorkoutService
 {
     private readonly IWorkoutRepository _workoutRepository;
     
+    const int DaysInFuture = 7;
+    const int WorkoutsToTake = 3;
+    
     public WorkoutService(
         IWorkoutRepository workoutRepository) 
         : base(workoutRepository)
     {
         _workoutRepository = _workoutRepository;
     }
-
-    public IEnumerable<Workout> GetMostRecent(DateTime today)
+    
+    public Workout? FindById(Guid workoutId)
     {
-        const int daysToTake = 7;
-        var workoutDate = today.AddDays(daysToTake);
+        return GetById(workoutId);
+    }
+
+    public IEnumerable<Workout> GetUpcoming()
+    {
+        DateTime today = DateTime.Today;
+        DateTime futureWorkoutDate = DateTime.Today.AddDays(DaysInFuture);
 
         return Get()
-            .Where(x => x.StartDateTime <= workoutDate)
-            .Where(x => x.StartDateTime >= today);
+            .Where(x => x.StartDateTime >= today)
+            .Where(x => x.StartDateTime <= futureWorkoutDate);
+
+    }
+    
+    public IEnumerable<Workout> GetByUserId (Guid userId)
+    {
+        DateTime today = DateTime.Today;
+        DateTime futureWorkoutDate = DateTime.Today.AddDays(DaysInFuture);
+
+        return Get()
+            .Where(x => x.StartDateTime >= today)
+            .Where(x => x.StartDateTime <= futureWorkoutDate)
+            .Where(x => x.UserWorkouts != null && x.UserWorkouts.Any(y => y.UserId == userId))
+            .Take(WorkoutsToTake);
     }
 }

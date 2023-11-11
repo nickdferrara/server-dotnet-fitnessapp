@@ -4,6 +4,9 @@ namespace server_dotnet_fitnessapp.Services.Interfaces;
 
 public interface IWorkoutService : IBaseService<Workout>
 {
-    IEnumerable<Workout> GetMostRecent(DateTime today);
+    Workout? FindById(Guid workoutId);
 
+    IEnumerable<Workout> GetUpcoming();
+
+    IEnumerable<Workout> GetByUserId(Guid userId);
 }

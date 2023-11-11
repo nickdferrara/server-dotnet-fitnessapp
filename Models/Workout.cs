@@ -10,8 +10,9 @@ public class Workout
     public Guid WorkoutId { get; set; }
     public Location Location { get; set; } = null!;
     public string Description { get; set; } = null!;
-    public int Capacity { get; set; } = 0;
+    public int Capacity { get; set; } = 0;    
     public DateTime StartDateTime { get; set; }
+    public int MinuteDuration { get; set; }
     public Coach Coach { get; set; } = null!;
     public IList<UserWorkout>? UserWorkouts { get; set; }
 }

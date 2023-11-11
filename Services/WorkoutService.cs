@@ -14,5 +14,14 @@ public class WorkoutService : BaseService<Workout>, IWorkoutService
     {
         _workoutRepository = _workoutRepository;
     }
-    
+
+    public IEnumerable<Workout> GetMostRecent(DateTime today)
+    {
+        const int daysToTake = 7;
+        var workoutDate = today.AddDays(daysToTake);
+
+        return Get()
+            .Where(x => x.StartDateTime <= workoutDate)
+            .Where(x => x.StartDateTime >= today);
+    }
 }

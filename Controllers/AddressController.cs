@@ -29,4 +29,44 @@ public class AddressController : Controller
 
         return Ok(_addressService.Insert(address));
     }
+    
+    [AllowAnonymous]
+    [HttpGet("/api/v1/address/{addressId}")]
+    [ProducesResponseType(200, Type = typeof(Address))]
+    public IActionResult GetById([FromQuery] Guid addressId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        return Ok(_addressService.GetById(addressId));
+    }
+    
+    [AllowAnonymous]
+    [HttpPut("/api/v1/address")]
+    [ProducesResponseType(200, Type = typeof(Address))]
+    public IActionResult Update([FromBody] Address address)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        return Ok(_addressService.Update(address));
+    }
+    
+    [AllowAnonymous]
+    [HttpDelete("/api/v1/address/{addressId}")]
+    [ProducesResponseType(200, Type = typeof(void))]
+    public IActionResult DeleteById([FromQuery] Guid addressId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        _addressService.DeleteById(addressId);
+        return Ok();
+    }
 }

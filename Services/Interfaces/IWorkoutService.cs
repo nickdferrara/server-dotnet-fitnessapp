@@ -6,7 +6,7 @@ public interface IWorkoutService : IBaseService<Workout>
 {
     Workout? FindById(Guid workoutId);
 
-    IEnumerable<Workout> GetUpcoming();
+    IEnumerable<Workout> GetUpcoming(Guid locationId);
 
     IEnumerable<Workout> GetByUserId(Guid userId);
 }

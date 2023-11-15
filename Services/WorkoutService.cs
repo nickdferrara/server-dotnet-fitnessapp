@@ -23,12 +23,13 @@ public class WorkoutService : BaseService<Workout>, IWorkoutService
         return GetById(workoutId);
     }
 
-    public IEnumerable<Workout> GetUpcoming()
+    public IEnumerable<Workout> GetUpcoming(Guid locationId)
     {
         DateTime today = DateTime.Today;
         DateTime futureWorkoutDate = DateTime.Today.AddDays(DaysInFuture);
 
         return Get()
+            .Where(x => x.Location.LocationId == locationId)
             .Where(x => x.StartDateTime >= today)
             .Where(x => x.StartDateTime <= futureWorkoutDate);
 

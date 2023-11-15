@@ -18,16 +18,16 @@ public class WorkoutController : Controller
     }
     
     [AllowAnonymous]
-    [HttpGet("/api/v1/workouts")]
+    [HttpGet("/api/v1/workouts/{locationId}")]
     [ProducesResponseType(200, Type = typeof(Workout))]
-    public IActionResult GetUpcoming()
+    public IActionResult GetUpcoming([FromQuery] Guid locationId)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        return Ok(_workoutService.GetUpcoming());
+        return Ok(_workoutService.GetUpcoming(locationId));
     } 
     
     [AllowAnonymous]

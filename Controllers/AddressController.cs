@@ -20,7 +20,7 @@ public class AddressController : Controller
     [AllowAnonymous]
     [HttpPost("/api/v1/address")]
     [ProducesResponseType(201, Type = typeof(Address))]
-    public IActionResult RegisterUser([FromBody] Address address)
+    public IActionResult Insert([FromBody] Address address)
     {
         if (!ModelState.IsValid)
         {

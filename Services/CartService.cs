@@ -7,8 +7,8 @@ namespace server_dotnet_fitnessapp.Services;
 
 public class CartService : BaseService<Cart>, ICartService
 {
-    public CartService(IBaseRepository<Cart> repository) 
-        : base(repository)
+    public CartService(ICartRepository cartRepository) 
+        : base(cartRepository)
     {
     }
 

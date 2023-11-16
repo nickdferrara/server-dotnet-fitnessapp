@@ -41,5 +41,4 @@ public class CartController : Controller
 
         return Ok(_cartService.GetByUserId(userId));
     }
-
 }

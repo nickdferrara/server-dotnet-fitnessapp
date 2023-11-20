@@ -5,6 +5,7 @@ using server_dotnet_fitnessapp.Services.Interfaces;
 
 namespace server_dotnet_fitnessapp.Controllers;
 
+[ApiController]
 public class CoachController : Controller
 {
     private readonly ICoachService _coachService;

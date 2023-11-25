@@ -29,7 +29,7 @@ public class CoachController : Controller
     }
     
     [AllowAnonymous]
-    [HttpPost("/api/v1/coaches/{id}")]
+    [HttpGet("/api/v1/coaches/{id}")]
     [ProducesResponseType(200, Type = typeof(Coach))]
     public IActionResult GetById([FromQuery] Guid id)
     {

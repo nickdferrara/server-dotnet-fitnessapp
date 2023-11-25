@@ -69,7 +69,5 @@ public class MembershipTypeController : Controller
         _membershipTypeService.DeleteById(id);
 
         return Ok();
-    }
-    
-    
+    }    
 }

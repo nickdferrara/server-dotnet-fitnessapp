@@ -57,7 +57,7 @@ public class PersonController : Controller
     }
     
     [AllowAnonymous]
-    [HttpPut("/api/v1/people")]
+    [HttpDelete("/api/v1/people")]
     [ProducesResponseType(200, Type = typeof(Person))]
     public IActionResult Delete([FromBody] Guid id)
     {

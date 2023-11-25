@@ -30,7 +30,7 @@ public class MembershipController : Controller
     }
     
     [AllowAnonymous]
-    [HttpPost("/api/v1/memberships")]
+    [HttpPut("/api/v1/memberships")]
     [ProducesResponseType(200, Type = typeof(Membership))]
     public IActionResult Update([FromBody] Membership membership)
     {

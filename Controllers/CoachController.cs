@@ -42,9 +42,9 @@ public class CoachController : Controller
     }
     
     [AllowAnonymous]
-    [HttpPut("/api/v1/coaches/{id}")]
+    [HttpPut("/api/v1/coaches")]
     [ProducesResponseType(200, Type = typeof(Coach))]
-    public IActionResult GetById([FromBody] Coach coach)
+    public IActionResult Update([FromBody] Coach coach)
     {
         if (!ModelState.IsValid)
         {

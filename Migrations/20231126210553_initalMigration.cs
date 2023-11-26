@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace server_dotnet_fitnessapp.Migrations
 {
     /// <inheritdoc />
-    public partial class AddNewModels : Migration
+    public partial class initalMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -100,6 +100,26 @@ namespace server_dotnet_fitnessapp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PersonId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Users_Persons_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "Persons",
+                        principalColumn: "PersonId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Carts",
                 columns: table => new
                 {
@@ -109,28 +129,11 @@ namespace server_dotnet_fitnessapp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Carts", x => x.CartId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.ProductId);
                     table.ForeignKey(
-                        name: "FK_Products_Carts_CartId",
-                        column: x => x.CartId,
-                        principalTable: "Carts",
-                        principalColumn: "CartId",
+                        name: "FK_Carts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -160,6 +163,35 @@ namespace server_dotnet_fitnessapp.Migrations
                         principalTable: "Persons",
                         principalColumn: "PersonId",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Coaches_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.ProductId);
+                    table.ForeignKey(
+                        name: "FK_Products_Carts_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Carts",
+                        principalColumn: "CartId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -171,6 +203,7 @@ namespace server_dotnet_fitnessapp.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Capacity = table.Column<int>(type: "int", nullable: false),
                     StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MinuteDuration = table.Column<int>(type: "int", nullable: false),
                     CoachId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -191,72 +224,26 @@ namespace server_dotnet_fitnessapp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Roster",
-                columns: table => new
-                {
-                    RosterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WorkoutId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roster", x => x.RosterId);
-                    table.ForeignKey(
-                        name: "FK_Roster_Workouts_WorkoutId",
-                        column: x => x.WorkoutId,
-                        principalTable: "Workouts",
-                        principalColumn: "WorkoutId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Waitlist",
-                columns: table => new
-                {
-                    WaitlistId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WorkoutId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Waitlist", x => x.WaitlistId);
-                    table.ForeignKey(
-                        name: "FK_Waitlist_Workouts_WorkoutId",
-                        column: x => x.WorkoutId,
-                        principalTable: "Workouts",
-                        principalColumn: "WorkoutId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
+                name: "UserWorkouts",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PersonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RosterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    WaitlistId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    WorkoutId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.PrimaryKey("PK_UserWorkouts", x => new { x.UserId, x.WorkoutId });
                     table.ForeignKey(
-                        name: "FK_Users_Persons_PersonId",
-                        column: x => x.PersonId,
-                        principalTable: "Persons",
-                        principalColumn: "PersonId",
+                        name: "FK_UserWorkouts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Users_Roster_RosterId",
-                        column: x => x.RosterId,
-                        principalTable: "Roster",
-                        principalColumn: "RosterId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Users_Waitlist_WaitlistId",
-                        column: x => x.WaitlistId,
-                        principalTable: "Waitlist",
-                        principalColumn: "WaitlistId",
+                        name: "FK_UserWorkouts_Workouts_WorkoutId",
+                        column: x => x.WorkoutId,
+                        principalTable: "Workouts",
+                        principalColumn: "WorkoutId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -301,28 +288,13 @@ namespace server_dotnet_fitnessapp.Migrations
                 column: "CartId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roster_WorkoutId",
-                table: "Roster",
-                column: "WorkoutId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Users_PersonId",
                 table: "Users",
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RosterId",
-                table: "Users",
-                column: "RosterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_WaitlistId",
-                table: "Users",
-                column: "WaitlistId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Waitlist_WorkoutId",
-                table: "Waitlist",
+                name: "IX_UserWorkouts_WorkoutId",
+                table: "UserWorkouts",
                 column: "WorkoutId");
 
             migrationBuilder.CreateIndex(
@@ -334,31 +306,11 @@ namespace server_dotnet_fitnessapp.Migrations
                 name: "IX_Workouts_LocationId",
                 table: "Workouts",
                 column: "LocationId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Carts_Users_UserId",
-                table: "Carts",
-                column: "UserId",
-                principalTable: "Users",
-                principalColumn: "UserId",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Coaches_Users_UserId",
-                table: "Coaches",
-                column: "UserId",
-                principalTable: "Users",
-                principalColumn: "UserId",
-                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Coaches_Users_UserId",
-                table: "Coaches");
-
             migrationBuilder.DropTable(
                 name: "Memberships");
 
@@ -366,19 +318,13 @@ namespace server_dotnet_fitnessapp.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
+                name: "UserWorkouts");
+
+            migrationBuilder.DropTable(
                 name: "MembershipTypes");
 
             migrationBuilder.DropTable(
                 name: "Carts");
-
-            migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Roster");
-
-            migrationBuilder.DropTable(
-                name: "Waitlist");
 
             migrationBuilder.DropTable(
                 name: "Workouts");
@@ -388,6 +334,9 @@ namespace server_dotnet_fitnessapp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Locations");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Persons");

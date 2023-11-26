@@ -43,9 +43,6 @@ builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
-builder.Services.AddScoped<IUserWorkoutService, UserWorkoutService>();
-builder.Services.AddScoped<IUserWorkoutRepository, UserWorkoutRepository>();
-
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
 

@@ -22,7 +22,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Workout> Workouts { get; set; }
     public DbSet<UserWorkout> UserWorkouts { get; set; }
-    public DbSet<Waitlist> Waitlist { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelbuilder)
     {
@@ -42,7 +41,7 @@ public class ApplicationDbContext : DbContext
         
         modelbuilder.Entity<UserWorkout>()
             .HasOne(x => x.Workout)
-            .WithMany(x => x.UserWorkouts)
+            .WithMany(x => x.Attendees)
             .HasForeignKey(x => x.WorkoutId);
 
         base.OnModelCreating(modelbuilder);

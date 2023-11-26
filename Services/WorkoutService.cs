@@ -40,10 +40,10 @@ public class WorkoutService : BaseService<Workout>, IWorkoutService
         DateTime today = DateTime.Today;
         DateTime futureWorkoutDate = DateTime.Today.AddDays(DaysInFuture);
 
+        //TODO: Filter by user id
         return Get()
             .Where(x => x.StartDateTime >= today)
             .Where(x => x.StartDateTime <= futureWorkoutDate)
-            .Where(x => x.UserWorkouts != null && x.UserWorkouts.Any(y => y.UserId == userId))
             .Take(WorkoutsToTake);
     }
 }

@@ -254,25 +254,6 @@ namespace server_dotnet_fitnessapp.Migrations
                     b.ToTable("UserWorkouts");
                 });
 
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.Waitlist", b =>
-                {
-                    b.Property<Guid>("WaitlistId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("SignedUpTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("WorkoutId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("WaitlistId");
-
-                    b.HasIndex("WorkoutId");
-
-                    b.ToTable("Waitlist");
-                });
-
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.Workout", b =>
                 {
                     b.Property<Guid>("WorkoutId")
@@ -404,23 +385,12 @@ namespace server_dotnet_fitnessapp.Migrations
                         .IsRequired();
 
                     b.HasOne("server_dotnet_fitnessapp.Models.Workout", "Workout")
-                        .WithMany("UserWorkouts")
+                        .WithMany("Attendees")
                         .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
-
-                    b.Navigation("Workout");
-                });
-
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.Waitlist", b =>
-                {
-                    b.HasOne("server_dotnet_fitnessapp.Models.Workout", "Workout")
-                        .WithMany()
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
 
                     b.Navigation("Workout");
                 });
@@ -456,7 +426,7 @@ namespace server_dotnet_fitnessapp.Migrations
 
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.Workout", b =>
                 {
-                    b.Navigation("UserWorkouts");
+                    b.Navigation("Attendees");
                 });
 #pragma warning restore 612, 618
         }

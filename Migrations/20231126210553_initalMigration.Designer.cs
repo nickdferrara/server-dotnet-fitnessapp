@@ -12,8 +12,8 @@ using server_dotnet_fitnessapp.Context;
 namespace server_dotnet_fitnessapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230422222849_MakeListsNotICollection")]
-    partial class MakeListsNotICollection
+    [Migration("20231126210553_initalMigration")]
+    partial class initalMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -218,22 +218,6 @@ namespace server_dotnet_fitnessapp.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.Roster", b =>
-                {
-                    b.Property<Guid>("RosterId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("WorkoutId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("RosterId");
-
-                    b.HasIndex("WorkoutId");
-
-                    b.ToTable("Roster");
-                });
-
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.User", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -248,40 +232,29 @@ namespace server_dotnet_fitnessapp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PersonId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("RosterId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("WaitlistId")
+                    b.Property<Guid?>("PersonId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId");
 
                     b.HasIndex("PersonId");
 
-                    b.HasIndex("RosterId");
-
-                    b.HasIndex("WaitlistId");
-
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.Waitlist", b =>
+            modelBuilder.Entity("server_dotnet_fitnessapp.Models.UserWorkout", b =>
                 {
-                    b.Property<Guid>("WaitlistId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("WorkoutId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("WaitlistId");
+                    b.HasKey("UserId", "WorkoutId");
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("Waitlist");
+                    b.ToTable("UserWorkouts");
                 });
 
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.Workout", b =>
@@ -302,6 +275,9 @@ namespace server_dotnet_fitnessapp.Migrations
 
                     b.Property<Guid>("LocationId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("MinuteDuration")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
@@ -393,45 +369,31 @@ namespace server_dotnet_fitnessapp.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.Roster", b =>
-                {
-                    b.HasOne("server_dotnet_fitnessapp.Models.Workout", "Workout")
-                        .WithMany("RosterList")
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Workout");
-                });
-
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.User", b =>
                 {
                     b.HasOne("server_dotnet_fitnessapp.Models.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("server_dotnet_fitnessapp.Models.Roster", null)
-                        .WithMany("Users")
-                        .HasForeignKey("RosterId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("server_dotnet_fitnessapp.Models.Waitlist", null)
-                        .WithMany("Users")
-                        .HasForeignKey("WaitlistId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Person");
                 });
 
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.Waitlist", b =>
+            modelBuilder.Entity("server_dotnet_fitnessapp.Models.UserWorkout", b =>
                 {
+                    b.HasOne("server_dotnet_fitnessapp.Models.User", "User")
+                        .WithMany("UserWorkouts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("server_dotnet_fitnessapp.Models.Workout", "Workout")
-                        .WithMany("WaitList")
+                        .WithMany("Attendees")
                         .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("User");
 
                     b.Navigation("Workout");
                 });
@@ -460,21 +422,14 @@ namespace server_dotnet_fitnessapp.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.Roster", b =>
+            modelBuilder.Entity("server_dotnet_fitnessapp.Models.User", b =>
                 {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("server_dotnet_fitnessapp.Models.Waitlist", b =>
-                {
-                    b.Navigation("Users");
+                    b.Navigation("UserWorkouts");
                 });
 
             modelBuilder.Entity("server_dotnet_fitnessapp.Models.Workout", b =>
                 {
-                    b.Navigation("RosterList");
-
-                    b.Navigation("WaitList");
+                    b.Navigation("Attendees");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using server_dotnet_fitnessapp.Dtos;
+using server_dotnet_fitnessapp.Extensions;
 using server_dotnet_fitnessapp.Models;
 using server_dotnet_fitnessapp.Services.Interfaces;
 
@@ -19,14 +21,17 @@ public class UserController : Controller
     [AllowAnonymous]
     [HttpPost("/api/v1/users/registeruser")]
     [ProducesResponseType(201, Type = typeof(User))]
-    public IActionResult RegisterUser([FromBody] User user)
+    public IActionResult RegisterUser([FromBody] UserRequestDto userRequestDto)
     {
+        User user = userRequestDto.ToModel();
+        
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
+        
 
-        return Ok(_userService.Insert(user));
+        return Ok(_userService.Insert(user).ToDto());
     }
     
     [AllowAnonymous]

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using server_dotnet_fitnessapp.Controllers.Base;
 using server_dotnet_fitnessapp.Dtos;
 using server_dotnet_fitnessapp.Extensions;
 using server_dotnet_fitnessapp.Models;
@@ -8,7 +9,7 @@ using server_dotnet_fitnessapp.Services.Interfaces;
 namespace server_dotnet_fitnessapp.Controllers;
 
 [ApiController]
-public class UserController : Controller
+public class UserController : BaseController
 {
     private readonly IUserService _userService;
     public UserController(
@@ -29,7 +30,6 @@ public class UserController : Controller
         {
             return BadRequest(ModelState);
         }
-        
 
         return Ok(_userService.Insert(user).ToDto());
     }

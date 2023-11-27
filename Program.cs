@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using server_dotnet_fitnessapp.Context;
-using server_dotnet_fitnessapp.Extensions;
+using server_dotnet_fitnessapp.Exceptions;
 using server_dotnet_fitnessapp.Repositories;
 using server_dotnet_fitnessapp.Repositories.Interfaces;
 using server_dotnet_fitnessapp.Services;
@@ -12,6 +12,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
 });
+
+builder.Services.AddTransient<GlobalExceptionHandling>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -64,6 +66,6 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.MapGet("/", () => "Hello World!");
+app.UseMiddleware<GlobalExceptionHandling>();
 app.MapControllers();
 app.Run();

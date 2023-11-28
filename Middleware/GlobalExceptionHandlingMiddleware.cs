@@ -2,9 +2,9 @@ using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
-namespace server_dotnet_fitnessapp.Exceptions;
+namespace server_dotnet_fitnessapp.Middleware;
 
-public class GlobalExceptionHandling : IMiddleware
+public class GlobalExceptionHandlingMiddleware : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -19,14 +19,13 @@ public class GlobalExceptionHandling : IMiddleware
             var problemDetails = new ProblemDetails
             {
                 Title = ex.GetType().Name,
-                Type = ex.GetType().FullName,
                 Detail = ex.Message,
                 Status = (int)HttpStatusCode.BadRequest
             };
-
-            string json = JsonSerializer.Serialize(problemDetails);
+            
+            context.Response.Headers.ContentType = "application/json; charset=utf-8";
+            string json = JsonSerializer.Serialize(problemDetails);            
             await context.Response.WriteAsync(json);
-            context.Response.ContentType = "application/json";
         }
     }
 }

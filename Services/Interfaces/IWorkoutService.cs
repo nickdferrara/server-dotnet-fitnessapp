@@ -9,4 +9,6 @@ public interface IWorkoutService : IBaseService<Workout>
     IEnumerable<Workout> GetUpcoming(Guid locationId);
 
     IEnumerable<Workout> GetByUserId(Guid userId);
+
+    Workout Cancel(Guid workoutId, Guid userId);
 }

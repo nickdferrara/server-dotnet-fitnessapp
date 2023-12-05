@@ -14,6 +14,10 @@ public class UserService : BaseService<User>, IUserService
     {
         _userRepository = userRepository;
     }
+    
+    public User? FindById(Guid userId) =>
+        Get().FirstOrDefault(x => x.UserId == userId); 
+    
 
     private User? FindByEmail(string email) =>
         Get().FirstOrDefault(x => x.Email.Equals(email));

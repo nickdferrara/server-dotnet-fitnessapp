@@ -55,6 +55,19 @@ public class WorkoutController : Controller
 
         return Ok(_workoutService.GetByUserId(userId));
     } 
+
+    [AllowAnonymous]
+    [HttpDelete("/api/v1/workouts/{id}/{userId}")]
+    [ProducesResponseType(200, Type = typeof(Workout))]
+    public IActionResult CancelById([FromQuery] Guid id, Guid userId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        return Ok(_workoutService.Cancel(id, userId));
+    } 
     
     [AllowAnonymous]
     [HttpPost("api/v1/workouts")]

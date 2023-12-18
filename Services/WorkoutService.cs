@@ -64,21 +64,46 @@ public class WorkoutService : BaseService<Workout>, IWorkoutService
         if (workout.IsWithinTwentyFourHours())
             throw new WorkoutWithinTwentyFourHourException(
                 "Workout cannot be cancelled within 24 hours of start time.");
-
-        var userWorkout = new UserWorkout
-        {
-            UserId = user.UserId,
-            User = user,
-            WorkoutId = workoutId,
-            Workout = workout
-
-        };
         
-        workout.Attendees?.Remove(userWorkout)
+        workout.Attendees?.Remove(new UserWorkout().Create(user, workout))
             .Also(x => Update(workout));
         
         return workout;
     }
-
     
+    public Workout SignUp(Guid workoutId, Guid userId)
+    {
+        var workout = FindById(workoutId);
+
+        if (workout is null)
+            throw new WorkoutNotFoundException("Workout not found.");
+        
+        var user = _userService.FindById(userId);
+        
+        if (user is null) 
+            throw new UserNotFoundException("User not found.");
+        
+        if (workout.IsWithinAnHour())
+            throw new WorkoutSignUpPeriodClosedException("Workout is closed for sign ups.");
+        
+        if (workout.IsFull())
+            throw new WorkoutFullException("Workout is full, would you like to be added to the waitlist?");
+        
+        if (workout.IsUserAlreadyAttending(user))
+            throw new UserAlreadyRegisteredException("You are already registered for this workout.");
+        
+        
+        if (IsUserAlreadySignedUpForWorkoutAtSameTime(user, workout))
+            throw new UserAlreadyRegisteredException("User is already registered for a workout at this time.");
+
+        workout.Attendees?.Add(new UserWorkout().Create(user, workout));
+        Update(workout);
+        
+        return workout;
+    }
+
+    private bool IsUserAlreadySignedUpForWorkoutAtSameTime(User user, Workout workout)
+    {
+        return GetByUserId(user.UserId).Any(x => x.StartDateTime == workout.StartDateTime);
+    }
 }

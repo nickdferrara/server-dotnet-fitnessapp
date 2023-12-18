@@ -56,15 +56,29 @@ public class WorkoutService : BaseService<Workout>, IWorkoutService
         if (workout is null)
             throw new WorkoutNotFoundException("Workout not found.");
         
+        var user = _userService.FindById(userId);
+        
+        if (user is null) 
+            throw new UserNotFoundException("User not found.");
+        
         if (workout.IsWithinTwentyFourHours())
             throw new WorkoutWithinTwentyFourHourException(
                 "Workout cannot be cancelled within 24 hours of start time.");
+
+        var userWorkout = new UserWorkout
+        {
+            UserId = user.UserId,
+            User = user,
+            WorkoutId = workoutId,
+            Workout = workout
+
+        };
         
-        
-        //TODO: Remove user from workout
-        Update(workout);
+        workout.Attendees?.Remove(userWorkout)
+            .Also(x => Update(workout));
         
         return workout;
     }
+
     
 }

@@ -14,5 +14,5 @@ public class Workout
     public DateTime StartDateTime { get; set; }
     public int MinuteDuration { get; set; }
     public Coach Coach { get; set; } = null!;
-    public IList<UserWorkout>? Attendees { get; set; }
+    public ICollection<UserWorkout>? Attendees { get; set; }
 }

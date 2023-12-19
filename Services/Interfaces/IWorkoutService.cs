@@ -11,4 +11,6 @@ public interface IWorkoutService : IBaseService<Workout>
     IEnumerable<Workout> GetByUserId(Guid userId);
 
     Workout Cancel(Guid workoutId, Guid userId);
+    
+    Workout SignUp(Guid workoutId, Guid userId);
 }

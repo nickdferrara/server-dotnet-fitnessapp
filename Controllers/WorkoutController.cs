@@ -55,7 +55,20 @@ public class WorkoutController : Controller
 
         return Ok(_workoutService.GetByUserId(userId));
     } 
+    
+    [AllowAnonymous]
+    [HttpPost("api/v1/workouts")]
+    [ProducesResponseType(201, Type = typeof(Workout))]
+    public IActionResult RegisterUser([FromBody] Workout workout)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
+        return Ok(_workoutService.Insert(workout));
+    }
+    
     [AllowAnonymous]
     [HttpDelete("/api/v1/workouts/{id}/{userId}")]
     [ProducesResponseType(200, Type = typeof(Workout))]
@@ -70,15 +83,15 @@ public class WorkoutController : Controller
     } 
     
     [AllowAnonymous]
-    [HttpPost("api/v1/workouts")]
+    [HttpPost("api/v1/workouts/{workoutId}/{userId}")]
     [ProducesResponseType(201, Type = typeof(Workout))]
-    public IActionResult RegisterUser([FromBody] Workout workout)
+    public IActionResult SignUp([FromQuery] Guid workoutId, Guid userId)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        return Ok(_workoutService.Insert(workout));
+        return Ok(_workoutService.SignUp(workoutId, userId));
     }
 }

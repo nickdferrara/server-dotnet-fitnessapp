@@ -70,7 +70,7 @@ public class WorkoutController : Controller
     }
     
     [AllowAnonymous]
-    [HttpDelete("/api/v1/workouts/{id}/{userId}")]
+    [HttpDelete("/api/v1/workouts/{id}/users/{userId}")]
     [ProducesResponseType(200, Type = typeof(Workout))]
     public IActionResult CancelById([FromQuery] Guid id, Guid userId)
     {
@@ -83,7 +83,7 @@ public class WorkoutController : Controller
     } 
     
     [AllowAnonymous]
-    [HttpPost("api/v1/workouts/{workoutId}/{userId}")]
+    [HttpPost("api/v1/workouts/{workoutId}/users/{userId}")]
     [ProducesResponseType(201, Type = typeof(Workout))]
     public IActionResult SignUp([FromQuery] Guid workoutId, Guid userId)
     {
